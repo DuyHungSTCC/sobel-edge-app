@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 
 export default function Page() {
-  const [image, setImage] = useState(null);
-  const [outputImage, setOutputImage] = useState(null);
+  const [image, setImage] = useState<string | null>(null);
+  const [outputImage, setOutputImage] = useState<string | null>(null);
   const [kernelX, setKernelX] = useState([
     [-1, 0, 1],
     [-2, 0, 2],
@@ -17,24 +17,29 @@ export default function Page() {
   ]);
   const [useBothKernels, setUseBothKernels] = useState(true);
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      setImage(event.target.result);
-      setOutputImage(null);
-    };
-    reader.readAsDataURL(file);
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    setImage(event.target?.result as string);
+    setOutputImage(null);
   };
+  reader.readAsDataURL(file);
+};
 
-  const handleKernelChange = (kernelSetter, i, j, value) => {
-    kernelSetter(prev => {
-      const newKernel = [...prev];
-      newKernel[i][j] = parseInt(value, 10) || 0;
-      return newKernel;
-    });
-  };
+  const handleKernelChange = (
+  kernelSetter: React.Dispatch<React.SetStateAction<number[][]>>,
+  i: number,
+  j: number,
+  value: string
+) => {
+  kernelSetter(prev => {
+    const newKernel = [...prev];
+    newKernel[i][j] = parseInt(value, 10) || 0;
+    return newKernel;
+  });
+};
 
   const applyCustomEdgeDetection = () => {
     if (!image) return;
@@ -43,6 +48,8 @@ export default function Page() {
     img.onload = () => {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
       canvas.width = img.width;
       canvas.height = img.height;
       ctx.drawImage(img, 0, 0);
