@@ -179,15 +179,9 @@ export default function Page() {
         </label>
       </div>
 
-      <div style={{
-        border: '1px solid #ccc',
-        padding: 10,
-        borderRadius: 6,
-        marginTop: 20,
-        display: 'inline-block'
-      }}>
-        <button onClick={applyCustomEdgeDetection}>Thực hiện</button>
-      </div>
+      <div style={{ marginTop: 20 }}>
+  	<button onClick={applyCustomEdgeDetection}>Thực hiện</button>
+	</div>
 
       {image && (
         <div style={{ display: 'flex', gap: 20, marginTop: 30 }}>
